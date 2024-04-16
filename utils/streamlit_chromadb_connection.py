@@ -203,14 +203,14 @@ class ChromadbConnection(BaseConnection):
         The `attributes` argument is a list of attributes to be included in the DataFrame.
         """
 
-        @streamlit.cache_data(ttl=10)
+        #@streamlit.cache_data(ttl=10)
         def get_data() -> pd.DataFrame:
             try:
                 collection = self._raw_instance.get_collection(collection_name)
                 collection_data = collection.get(
                     include=attributes
                 )
-                return pd.DataFrame(data=collection_data)[attributes]
+                return pd.DataFrame(data=collection_data)[["ids"] + attributes]
             except Exception as exception:
                 raise Exception(f"Error while getting data from collection `{collection_name}`: {str(exception)}")
         return get_data()
@@ -236,14 +236,16 @@ class ChromadbConnection(BaseConnection):
         try:
             collection = self._raw_instance.get_collection(collection_name)
             results = collection.query(
-                query_texts=query,
+                query_embeddings=query,  # query_texts
                 n_results=num_results_limit,
                 include=attributes,
                 where=where_metadata_filter,
                 where_document=where_document_filter
             )
-            df = pd.DataFrame(data=results)
-            return df[["ids"] + attributes]
+            return results
+            # print(results)
+            # df = pd.DataFrame(data=results)
+            # return df[["ids"] + attributes]
 
         except Exception as exception:
             raise Exception(f"Error while querying collection `{collection_name}`: {str(exception)}")

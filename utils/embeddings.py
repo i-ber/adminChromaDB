@@ -28,3 +28,11 @@ def create_documents(content, meta):
         }
     except Exception as exception:
         raise Exception(f"Error while create documents: {str(exception)}")
+
+
+def embed_query(text):
+    try:
+        embedder = YandexEmbeddings(**ya_auth)
+        return embedder.embed_query(text)
+    except Exception as exception:
+        raise Exception(f"Error while embed query: {str(exception)}")
