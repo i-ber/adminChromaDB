@@ -16,6 +16,7 @@ from chromadb.utils.embedding_functions import (
 )
 from chromadb import Client
 from chromadb.api import Collection
+from chromadb.config import Settings
 from typing import Dict, List
 from typing_extensions import override
 import pandas as pd
@@ -56,6 +57,10 @@ class ChromadbConnection(BaseConnection):
             return chromadb.HttpClient(
                 host=self._kwargs["host"],
                 port=self._kwargs["port"],
+                settings=Settings(
+                    chroma_client_auth_provider="chromadb.auth.token.TokenAuthClientProvider",
+                    chroma_client_auth_credentials=self._kwargs["auth_token"]
+                )
             )
 
         else:
