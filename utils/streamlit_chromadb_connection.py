@@ -197,7 +197,7 @@ class ChromadbConnection(BaseConnection):
 
     def get_collection_data(self,
                             collection_name: str,
-                            attributes: List = ["documents", "embeddings", "metadatas"]):
+                            attributes: List = ["documents", "metadatas", "embeddings"]):
         """
         This method gets all data from a collection in ChromaDB in form of a Pandas DataFrame.
         The `attributes` argument is a list of attributes to be included in the DataFrame.
@@ -210,7 +210,7 @@ class ChromadbConnection(BaseConnection):
                 collection_data = collection.get(
                     include=attributes
                 )
-                return pd.DataFrame(data=collection_data)
+                return pd.DataFrame(data=collection_data)[attributes]
             except Exception as exception:
                 raise Exception(f"Error while getting data from collection `{collection_name}`: {str(exception)}")
         return get_data()
