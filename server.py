@@ -18,8 +18,17 @@ conn = st.connection(name="http_connection",
                      type=ChromadbConnection,
                      **configuration)
 
-collection_name = "botpress_collection"
+st.session_state["chroma_collections"] = conn.get_all_collection_names()
+if "chroma_collections" in st.session_state:
+    st.session_state["selected_collection"] = st.selectbox(
+            label="Chroma collections",
+            options=st.session_state["chroma_collections"]
+        )
+    if st.session_state["selected_collection"]:
+        collection_df = conn.get_collection_data(collection_name=st.session_state["selected_collection"])
+        documents_collection_df = collection_df[["documents", "metadatas", "embeddings"]]
+        with st.container():
+            st.subheader("Embedding data")
+            st.markdown("Dataframe:")
+            st.dataframe(documents_collection_df)
 
-collection_df = conn.get_collection_data(collection_name)
-documents_collection_df = collection_df[["documents", "metadatas", "embeddings"]]
-st.dataframe(documents_collection_df)
