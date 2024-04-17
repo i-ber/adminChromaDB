@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "adminchromadb"
+version = "0.1.0"
+description = ""
+authors = ["iber <i-ber@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.33.0"
+yandex-chain = "^0.0.6"
+chromadb = "^0.4.24"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
